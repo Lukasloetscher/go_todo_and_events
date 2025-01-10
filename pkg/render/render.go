@@ -14,7 +14,7 @@ import (
 
 func RenderTemplate(w http.ResponseWriter, path string, layout_path string, td *models.TemplateData, app_ptr *config.AppConfig, r *http.Request) error {
 
-	layout_path_ext := layout_path + "*.tmpl"
+	layout_path_ext := layout_path + "/*.tmpl"
 	//First we check if the serversettings want to use cached data:
 	var t *template.Template
 	var found bool

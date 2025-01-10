@@ -27,7 +27,7 @@ func Create_Manual_Routes(app *config.AppConfig) (_ http.Handler) {
 	//Get_requests
 
 	//add generic pages (Get Requests):
-	err := handlers.Add_Generic_Handlers(mux, "templates/auto/", "./templates/layouts", "/generic/", app)
+	err := handlers.Add_Generic_Handlers(mux, "templates/", "./templates/layouts", "/", app)
 	if err != nil {
 		log.Panic(err)
 	}
