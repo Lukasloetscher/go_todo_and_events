@@ -6,16 +6,15 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"path/filepath"
 	"strconv"
 
 	"github.com/Lukasloetscher/go_todo_and_events/pkg/config"
 	"github.com/Lukasloetscher/go_todo_and_events/pkg/models"
 )
 
-func RenderTemplate(w http.ResponseWriter, path string, td *models.TemplateData, app_ptr *config.AppConfig, r *http.Request) error {
+func RenderTemplate(w http.ResponseWriter, path string, layout_path string, td *models.TemplateData, app_ptr *config.AppConfig, r *http.Request) error {
 
-	const layout_path string = "templates/layouts/*.tmpl" //todo move this, so it is more dynamic
+	layout_path_ext := layout_path + "*.tmpl"
 	//First we check if the serversettings want to use cached data:
 	var t *template.Template
 	var found bool
@@ -27,7 +26,7 @@ func RenderTemplate(w http.ResponseWriter, path string, td *models.TemplateData,
 				return errors.New("site" + path + "was not found in cache, but ForcePreCache is" + strconv.FormatBool(app_ptr.ForcePreCache))
 			} else {
 				//we load the site and add it to the Cache
-				t, err = Load_Template_From_Path(path, layout_path)
+				t, err = Load_Template_From_Path(path, layout_path_ext)
 				if err != nil {
 					log.Println(err)
 					return err
@@ -43,7 +42,7 @@ func RenderTemplate(w http.ResponseWriter, path string, td *models.TemplateData,
 		}
 
 	} else {
-		t, err = Load_Template_From_Path(path, layout_path)
+		t, err = Load_Template_From_Path(path, layout_path_ext)
 		if err != nil {
 			log.Println(err)
 			return err
@@ -73,23 +72,4 @@ func RenderTemplate(w http.ResponseWriter, path string, td *models.TemplateData,
 
 	return nil
 
-}
-
-// Load_Template_From_Path creates a template from a path and layout_path
-func Load_Template_From_Path(path string, layout_path string) (*template.Template, error) {
-	ts, err := template.New(filepath.Base(path)).ParseFiles(path) //The name needs to be the same as the name of the file
-	if err != nil {
-		return nil, err
-	}
-	layouts, err := filepath.Glob(layout_path)
-	if err != nil {
-		return nil, err
-	}
-	if len(layouts) > 0 {
-		ts, err = ts.ParseGlob(layout_path)
-		if err != nil {
-			return nil, err
-		}
-	}
-	return ts, nil
 }

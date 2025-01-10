@@ -29,7 +29,7 @@ func Add_Generic_Handlers(mux *chi.Mux, tmpl_path string, layout_path string, ro
 			//We now define the handler for this and add it to the handlers_get map, the key will be the path, this makes sure, that we do not have multiple sites, that go to the same site
 			mux.Get(name, func(w http.ResponseWriter, r *http.Request) {
 				//Here we need to render the page...
-				render.RenderTemplate(w, path, &models.TemplateData{}, app_ptr, r)
+				render.RenderTemplate(w, path, layout_path, &models.TemplateData{}, app_ptr, r)
 			})
 
 			//fmt.Println("added get handler for ", name)
