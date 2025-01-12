@@ -8,9 +8,12 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+//just as a note:
+// https://pkg.go.dev/github.com/jackc/pgx/v5
+
 // Read_table allows for simple reads from table.
 // this function does not allow for complicated stuff
-func (m *SQL_Connection) Read_table(table_name string, schema string, col []string, cond map[string]string) (data []map[string]string, err error) {
+func (m *SQL_Connection) Read_table(table_name string, schema string, col []string, cond map[string]string) (_ []map[string]string, err error) {
 	conn, err := m.establish_connecion()
 	if err != nil {
 		return nil, err
@@ -42,7 +45,6 @@ func (m *SQL_Connection) Read_table(table_name string, schema string, col []stri
 			i++
 		}
 	}
-	fmt.Println(sql_string)
 	rows, err := conn.Query(context.Background(), sql_string)
 	if err != nil {
 		log.Panic(err)
@@ -54,16 +56,21 @@ func (m *SQL_Connection) Read_table(table_name string, schema string, col []stri
 	for i := range s {
 		s[i] = new(interface{})
 	}
-	fmt.Println("start of for each")
-	re, err := pgx.ForEachRow(rows, s, func() error {
-		fmt.Println(*(s[0].(*interface{})), *(s[1].(*interface{})), *(s[2].(*interface{})))
+	var data []map[string]string
+	i := 0
+	_, err = pgx.ForEachRow(rows, s, func() error {
+		data = append(data, make(map[string]string))
+		for ii, val := range s {
+			//value_string := (*(val.(*interface{}))).(string) //type assertion see https://go.dev/ref/spec#Type_assertions
+			//this is not the cleanest -> i should code this specific for tables i'm goingto use.
+			value_string := fmt.Sprintf("%v", *(val.(*interface{})))
+			data[i][col[ii]] = value_string
+		}
+		i += 1
 		return nil
 	})
 	if err != nil {
 		log.Panic(err)
 	}
-	fmt.Println(re)
-	fmt.Println("end of for each")
-
-	return nil, nil
+	return data, nil
 }

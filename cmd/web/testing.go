@@ -12,7 +12,10 @@ func test() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	col := []string{"ind", "name", "kuerzel"}
-	m.Read_table("test", "src", col, nil)
-
+	col := []string{"kuerzel", "ind", "name"}
+	data, err := m.Read_table("test", "src", col, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(data)
 }
