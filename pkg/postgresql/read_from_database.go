@@ -2,6 +2,7 @@ package postgresql
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 
@@ -30,7 +31,7 @@ func (m *SQL_Connection) Read_table(table_name string, schema string, col []stri
 			}
 		}
 	} else { //when there are no columns specified we read all of them
-		sql_string += "* "
+		return _, errors.New("No Columsn provided for query.")
 	}
 	sql_string += "FROM " + schema + "." + table_name
 	if len(cond) != 0 {
