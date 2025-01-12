@@ -45,17 +45,24 @@ func (m *SQL_Connection) Read_table(table_name string, schema string, col []stri
 	fmt.Println(sql_string)
 	rows, err := conn.Query(context.Background(), sql_string)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 		return nil, err
 	}
 
 	defer rows.Close()
-	var n, n2, n3 string
+	s := make([]any, len(col))
+	for i := range s {
+		s[i] = new(interface{})
+	}
 	fmt.Println("start of for each")
-	pgx.ForEachRow(rows, []any{&n, &n2, &n3}, func() error {
-		fmt.Println(n, n2, n3)
+	re, err := pgx.ForEachRow(rows, s, func() error {
+		fmt.Println(*(s[0].(*interface{})), *(s[1].(*interface{})), *(s[2].(*interface{})))
 		return nil
 	})
+	if err != nil {
+		log.Panic(err)
+	}
+	fmt.Println(re)
 	fmt.Println("end of for each")
 
 	return nil, nil
