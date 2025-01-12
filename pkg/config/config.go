@@ -5,18 +5,20 @@ import (
 	"net/smtp"
 
 	"github.com/alexedwards/scs/v2"
+	"github.com/jackc/pgx/v5"
 )
 
 //This should not be dependent on any other packages
 
 // Holds the application config
 type AppConfig struct {
-	UseCache      bool
-	ForcePreCache bool
-	Portnumber    int64
-	InProduction  bool
-	Data          Backend_data
-	Email_auth    map[string]Email_sending
+	UseCache       bool
+	ForcePreCache  bool
+	Portnumber     int64
+	InProduction   bool
+	Data           Backend_data
+	Email_auth     map[string]Email_sending
+	SQL_connection *pgx.Conn // is hould rather do this in its own package....
 }
 
 type Backend_data struct {
