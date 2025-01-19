@@ -3,8 +3,8 @@ package mymiddleware
 import (
 	"net/http"
 
-	mysessions "github.com/Lukasloetscher/go_todo_and_events/pkg/MySessions"
 	"github.com/Lukasloetscher/go_todo_and_events/pkg/config"
+	"github.com/Lukasloetscher/go_todo_and_events/pkg/mysessions"
 )
 
 // Create_SessionLoad creates the middleware SessionLoad with a pointer to the correct app.
