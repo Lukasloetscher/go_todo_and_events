@@ -1,0 +1,21 @@
+{
+    "overall_version": "0.0.0",
+    "tables": [
+        {
+            "name": "users",
+            "schema": "src",
+            "version": "0.0.0",
+            "source": "SQL/table/src/users.sql"
+        }
+    ],
+    "procedures":[
+        {
+            "name": "create_users",
+            "schema": "src",
+            "version": "0.0.0",
+            "source": "SQL/procedure/src/create_users.sql"
+        
+        }
+    ]
+
+}
