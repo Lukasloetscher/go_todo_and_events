@@ -11,8 +11,8 @@ import (
 
 func main() {
 
-	test()
-	return
+	//test()
+	//return
 	var app_ptr *config.AppConfig
 	app_ptr, err := config.Initialise_Settings()
 	if err != nil {
